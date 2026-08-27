@@ -17,7 +17,7 @@ getCode(): \Kubernetes\Client\Model\VersionInfo
 
 
 
-get the code version
+get the version information for this server
 
 ### Example
 
