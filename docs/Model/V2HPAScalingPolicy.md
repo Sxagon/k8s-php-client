@@ -1,0 +1,11 @@
+# V2HPAScalingPolicy
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**period_seconds** | **int** | periodSeconds specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min). |
+**type** | **string** | type is used to specify the scaling policy. |
+**value** | **int** | value contains the amount of change which is permitted by the policy. It must be greater than zero |
+
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
