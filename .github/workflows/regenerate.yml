@@ -1,0 +1,72 @@
+name: Check for new Kubernetes release and regenerate client
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-and-regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout k8s-php-client repo
+        uses: actions/checkout@v4
+
+      - name: Checkout gen fork
+        uses: actions/checkout@v4
+        with:
+          repository: sxagon/gen
+          path: gen
+
+      - name: Get latest stable Kubernetes release
+        id: latest
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/kubernetes/kubernetes/releases \
+            | jq -r '[.[] | select(.prerelease==false and .draft==false)][0].tag_name')
+          echo "tag=$LATEST" >> "$GITHUB_OUTPUT"
+
+      - name: Compare with current settings
+        id: compare
+        run: |
+          source settings
+          CURRENT_BRANCH="release-$(echo "$CLIENT_VERSION" | cut -d. -f1,2)"
+          NEW_TAG="${{ steps.latest.outputs.tag }}"
+          NEW_BRANCH="release-$(echo "$NEW_TAG" | sed 's/^v//' | cut -d. -f1,2)"
+          if [ "$CURRENT_BRANCH" != "$NEW_BRANCH" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "new_branch=$NEW_BRANCH" >> "$GITHUB_OUTPUT"
+            echo "new_version=$(echo "$NEW_TAG" | sed 's/^v//')" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update settings file
+        if: steps.compare.outputs.changed == 'true'
+        run: |
+          sed -i "s/KUBERNETES_BRANCH=.*/KUBERNETES_BRANCH=\"${{ steps.compare.outputs.new_branch }}\"/" settings
+          sed -i "s/CLIENT_VERSION=.*/CLIENT_VERSION=\"${{ steps.compare.outputs.new_version }}\"/" settings
+
+      - name: Run generator
+        if: steps.compare.outputs.changed == 'true'
+        run: |
+          chmod +x gen/openapi/php.sh
+          rm -rf lib docs test
+          bash gen/openapi/php.sh "$(pwd)" "$(pwd)/settings"
+
+      - name: Open Pull Request
+        if: steps.compare.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Regenerate client for Kubernetes ${{ steps.compare.outputs.new_branch }}"
+          commit-message: "chore: regenerate PHP client for ${{ steps.compare.outputs.new_branch }}"
+          branch: "auto-regen-${{ steps.compare.outputs.new_branch }}"
+          add-paths: |
+            lib
+            docs
+            test
+            settings
