@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**last_transition_time** | **\DateTime** | Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers. | [optional]
-**message** | **string** |  | [optional]
-**reason** | **string** |  | [optional]
+**last_transition_time** | **\DateTime** | Last time the condition transitioned from one status to another. | [optional]
+**message** | **string** | Human-readable message indicating details about last transition. | [optional]
+**reason** | **string** | Unique, one-word, CamelCase reason for the condition&#39;s last transition. | [optional]
 **status** | **string** | Status of the condition, one of True, False, Unknown. |
 **type** | **string** | Type of namespace controller condition. |
 

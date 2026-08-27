@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**error_code** | **int** | errorCode is a numeric gRPC code representing the error encountered during Attach or Detach operations.  This field requires the MutableCSINodeAllocatableCount feature gate being enabled to be set. | [optional]
 **message** | **string** | message represents the error encountered during Attach or Detach operation. This string may be logged, so it should not contain sensitive information. | [optional]
 **time** | **\DateTime** | time represents the time the error was encountered. | [optional]
 

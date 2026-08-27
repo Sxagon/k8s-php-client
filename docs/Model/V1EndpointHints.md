@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**for_zones** | [**\Kubernetes\Client\Model\V1ForZone[]**](V1ForZone.md) | forZones indicates the zone(s) this endpoint should be consumed by to enable topology aware routing. | [optional]
+**for_nodes** | [**\Kubernetes\Client\Model\V1ForNode[]**](V1ForNode.md) | forNodes indicates the node(s) this endpoint should be consumed by when using topology aware routing. May contain a maximum of 8 entries. | [optional]
+**for_zones** | [**\Kubernetes\Client\Model\V1ForZone[]**](V1ForZone.md) | forZones indicates the zone(s) this endpoint should be consumed by when using topology aware routing. May contain a maximum of 8 entries. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
