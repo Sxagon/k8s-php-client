@@ -18,11 +18,11 @@ To install the bindings via [Composer](https://getcomposer.org/), add the follow
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/kubernetes-php/php.git"
+      "url": "https://github.com/Sxagon/k8s-php-client.git"
     }
   ],
   "require": {
-    "kubernetes-php/php": "*@dev"
+    "Sxagon/k8s-php-client": "*@dev"
   }
 }
 ```
