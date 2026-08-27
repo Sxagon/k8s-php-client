@@ -19,7 +19,7 @@ jobs:
       - name: Checkout gen fork
         uses: actions/checkout@v4
         with:
-          repository: sxagon/gen
+          repository: sxagon/kubernetes-client-gen
           path: gen
 
       - name: Get latest stable Kubernetes release
